@@ -138,10 +138,13 @@ const sidebarStyle = theme => ({
     margin: "10px 15px 0",
     borderRadius: "3px",
     position: "relative",
-    display: "block",
+    //display: "block",
     padding: "10px 15px",
     backgroundColor: "transparent",
     ...defaultFont
+  },
+  nestedItem: {
+    padding: "10px 45px",
   },
   itemIcon: {
     width: "24px",
