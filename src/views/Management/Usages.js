@@ -16,36 +16,72 @@ const useStyles = makeStyles(styles);
 export default function Usages() {
 
     const [usages, setUsages] = useState([]);
+    const [users, setUsers] = useState([]);
+    const [zones, setZones] = useState([]);
+    const [bikes, setBikes] = useState([]);
     const [loading, setLoading] = useState(true);
     const classes = useStyles();
 
     useEffect(() => {
         fetch('http://35.189.94.121/usages', {
             method: 'get'
+        }).then((response) => {
+            return response.json();
+        }).then(usagesData => {
+            setUsages(usagesData)
+        }).then(() => fetch('http://35.189.94.121/users', {
+            method: 'get'
+        })).then(response => {
+            return response.json();
+        }).then(usersData => {
+            setUsers(usersData)
+        }).then(() => fetch('http://35.189.94.121/zones', {
+            method: 'get'
+        })).then(response => {
+            return response.json();
+        }).then(zonesData => {
+            setZones(zonesData);
+        }).then(() => fetch('http://35.189.94.121/bikes', {
+            method: 'get'
+        })).then(response => {
+            return response.json();
+        }).then(bikesData => {
+            setBikes(bikesData);
+        }).then(() => {
+            setLoading(false);
         })
-            .then((response) => {
-                return response.json();
-            })
-            .then(usagesData => {
-                setUsages(usagesData)
-            })
-            .then(() => {
-                setLoading(false);
-            })
     }, []);
 
     const render = loading ? [["...Loading"]] : (
         usages.map(usage => {
             return [
-                usage.userId,
-                usage.bikeId,
-                usage.startZoneId,
-                usage.endZoneId,
+                findUserName(usage.userId),
+                findBikeBarcode(usage.bikeId),
+                findZoneName(usage.startZoneId),
+                findZoneName(usage.endZoneId),
                 usage.createdAt,
                 usage.updatedAt
             ]
         })
     )
+
+    function findUserName(userId) {
+        for (let i = 0; i < users.length; i++)
+            if (users[i].id === userId)
+                return users[i].name;
+    }
+
+    function findZoneName(zoneId) {
+        for (let i = 0; i < zones.length; i++)
+            if (zones[i].id === zoneId)
+                return zones[i].name;
+    }
+
+    function findBikeBarcode(bikeId) {
+        for (let i = 0; i < zones.length; i++)
+            if (bikes[i].id === bikeId)
+                return bikes[i].barcode;
+    }
 
     return (
         <div>

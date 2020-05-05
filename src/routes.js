@@ -34,8 +34,8 @@ const dashboardRoutes = [
         isNested: false
     },
     {
-        path: "/maps",
-        name: "Maps",
+        path: "/map",
+        name: "Map",
         icon: MapIcon,
         component: Maps,
         layout: "/admin",

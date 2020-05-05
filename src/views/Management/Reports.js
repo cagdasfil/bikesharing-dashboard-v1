@@ -16,33 +16,43 @@ const useStyles = makeStyles(styles);
 export default function Reports() {
 
     const [reports, setReports] = useState([]);
+    const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const classes = useStyles();
 
     useEffect(() => {
         fetch('http://35.189.94.121/reports', {
             method: 'get'
+        }).then(response => {
+            return response.json();
+        }).then(reportsData => {
+            setReports(reportsData)
+        }).then(() => fetch('http://35.189.94.121/users', {
+            method: 'get'
+        })).then(response => {
+            return response.json();
+        }).then(usersData => {
+            setUsers(usersData)
+        }).then(() => {
+            setLoading(false);
         })
-            .then((response) => {
-                return response.json();
-            })
-            .then(reportsData => {
-                setReports(reportsData)
-            })
-            .then(() => {
-                setLoading(false);
-            })
     }, []);
 
     const render = loading ? [["...Loading"]] : (
         reports.map(report => {
             return [
-                report.userId,
+                findUserName(report.userId),
                 report.title,
                 report.status
             ]
         })
     )
+
+    function findUserName(userId) {
+        for (let i = 0; i < users.length; i++)
+            if (users[i].id === userId)
+                return users[i].name;
+    }
 
     return (
         <div>

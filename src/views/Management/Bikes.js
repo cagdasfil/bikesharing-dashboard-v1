@@ -16,33 +16,43 @@ const useStyles = makeStyles(styles);
 export default function Bikes() {
 
     const [bikes, setBikes] = useState([]);
+    const [zones, setZones] = useState([]);
     const [loading, setLoading] = useState(true);
     const classes = useStyles();
 
     useEffect(() => {
         fetch('http://35.189.94.121/bikes', {
             method: 'get'
+        }).then(response => {
+            return response.json();
+        }).then(bikesData => {
+            setBikes(bikesData);
+        }).then(() => fetch('http://35.189.94.121/zones', {
+            method: 'get'
+        })).then(response => {
+            return response.json();
+        }).then(zonesData => {
+            setZones(zonesData);
+        }).then(() => {
+            setLoading(false);
         })
-            .then((response) => {
-                return response.json();
-            })
-            .then(bikesData => {
-                setBikes(bikesData)
-            })
-            .then(() => {
-                setLoading(false);
-            })
     }, []);
 
     const render = loading ? [["...Loading"]] : (
         bikes.map(bike => {
             return [
                 bike.barcode,
-                bike.lastZoneId,
+                findZoneName(bike.lastZoneId),
                 bike.isAvailable ? "true" : "false"
             ]
         })
     )
+
+    function findZoneName(zoneId) {
+        for (let i = 0; i < zones.length; i++)
+            if (zones[i].id === zoneId)
+                return zones[i].name;
+    }
 
     return (
         <div>
