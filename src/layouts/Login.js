@@ -61,12 +61,16 @@ export default function Login() {
     //Check admin or user
     if(loginResponse.user.role.type === "admin"){
       localStorage.setItem("jwt", loginResponse.jwt);
-      return <Redirect to="/admin/dashboard" />
+      window.location.href="/admin/dashboard"
     }
     else{
       console.log("You are not a system admin!");
     }
   }
+  function handleSubmit(event) {
+    event.preventDefault();
+  }
+
   function validateForm() {
     return admin.length > 0 && password.length > 0;
   }
@@ -101,7 +105,9 @@ export default function Login() {
         <Typography component="h1" variant="h5">
           Sign in to Dashboard
         </Typography>
-        <form className={classes.form} noValidate>
+        <form 
+        onSubmit={handleSubmit}
+        className={classes.form} noValidate>
           <TextField
             variant="outlined"
             margin="normal"
@@ -133,7 +139,7 @@ export default function Login() {
             variant="contained"
             color="primary"
             className={classes.submit}
-            
+           
             onClick ={()=> sendLoginRequest()}
           >
             Sign In
