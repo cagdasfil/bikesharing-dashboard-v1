@@ -68,8 +68,9 @@ export default class Mapping extends React.Component{
       delete: false,
       isUpdate: false,
       updateCoordinates: [],
-      jwt: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlOTYwMWYxMTg3OThiNzYyYzRlOGFmOCIsImlhdCI6MTU4Njg5MTIwMywiZXhwIjoxNTg5NDgzMjAzfQ.i6y02fhkMIgXBJT_pdCjzzEHID4-gI__EslUZdqp5eM",
+      jwt: localStorage.jwt,
     };
+
     this.handleZoneData = this.handleZoneData.bind(this);
 
     this.handleSubmit = this.handleSubmit.bind(this);
