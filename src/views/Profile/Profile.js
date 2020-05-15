@@ -88,7 +88,7 @@ export default function Profile() {
                         fullWidth
                         id="admin"
                         label="Admin username"
-                        defaultValue={user.username}
+                        defaultValue={username}
                         name="admin"
                         onChange={e => setUsername(e.target.value)}
                     />
@@ -175,11 +175,9 @@ export default function Profile() {
               </a>
             </CardAvatar>
             <CardBody profile>
-              <h6 className={classes.cardCategory}>Administrator</h6>
+              <h6 className={classes.cardCategory}>METU BikeSharing Manager</h6>
               <h4 className={classes.cardTitle}>{user.name} {user.surname}</h4>
-              <p className={classes.description}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-              </p>
+              
             
             </CardBody>
           </Card>
