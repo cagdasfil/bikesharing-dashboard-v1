@@ -85,7 +85,14 @@ export default function Sidebar(props) {
                   disableTypography={true}
                 />
               </ListItem>
+
+              {prop.isDivided ? <Divider style={{
+                backgroundColor: 'grey',
+                width: '150px',
+                margin: '0 0 0 60px'
+              }} /> : null}
             </NavLink>
+
           );
         }
       })

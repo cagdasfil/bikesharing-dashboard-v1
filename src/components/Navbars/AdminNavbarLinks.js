@@ -125,7 +125,7 @@ export default function AdminNavbarLinks() {
                     >
                       Users
                     </MenuItem>
-                    <Divider light />
+
                     <MenuItem
                       onClick={handleCloseManagement}
                       className={classes.dropdownItem}
@@ -133,23 +133,32 @@ export default function AdminNavbarLinks() {
                     >
                       Bikes
                     </MenuItem>
+
+                    <MenuItem
+                      onClick={handleCloseManagement}
+                      className={classes.dropdownItem}
+                      component={Link} to="/admin/zones"
+                    >
+                      Zones
+                    </MenuItem>
                     <Divider light />
+
+                    <MenuItem
+                      onClick={handleCloseManagement}
+                      className={classes.dropdownItem}
+                      component={Link} to="/admin/usages"
+                    >
+                      Usages
+                    </MenuItem>
+
                     <MenuItem
                       onClick={handleCloseManagement}
                       className={classes.dropdownItem}
                       component={Link} to="/admin/payments"
                     >
+
                       Payments
                     </MenuItem>
-                    <Divider light />
-                    <MenuItem
-                      onClick={handleCloseManagement}
-                      className={classes.dropdownItem}
-                      component={Link} to="/admin/reports"
-                    >
-                      User Reports
-                    </MenuItem>
-                    <Divider light />
                     <MenuItem
                       onClick={handleCloseManagement}
                       className={classes.dropdownItem}
@@ -158,21 +167,17 @@ export default function AdminNavbarLinks() {
                       Transactions
                     </MenuItem>
                     <Divider light />
+
                     <MenuItem
                       onClick={handleCloseManagement}
                       className={classes.dropdownItem}
-                      component={Link} to="/admin/usages"
+                      component={Link} to="/admin/reports"
                     >
-                      Usages
+                      User Reports
                     </MenuItem>
-                    <Divider light />
-                    <MenuItem
-                      onClick={handleCloseManagement}
-                      className={classes.dropdownItem}
-                      component={Link} to="/admin/zones"
-                    >
-                      Zones
-                    </MenuItem>
+
+
+
 
                   </MenuList>
                 </ClickAwayListener>

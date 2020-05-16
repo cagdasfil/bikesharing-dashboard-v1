@@ -31,7 +31,8 @@ const dashboardRoutes = [
         component: DashboardPage,
         layout: "/admin",
         childOf: "Dashboard",
-        isNested: false
+        isNested: false,
+        isDivided: false
     },
     {
         path: "/map",
@@ -40,7 +41,8 @@ const dashboardRoutes = [
         component: Maps,
         layout: "/admin",
         childOf: "Yourself",
-        isNested: false
+        isNested: false,
+        isDivided: false
     },
     {
         path: "/profile",
@@ -49,7 +51,8 @@ const dashboardRoutes = [
         component: Profile,
         layout: "/admin",
         childOf: "Yourself",
-        isNested: false
+        isNested: false,
+        isDivided: false
     },
     {
         path: "/users",
@@ -58,7 +61,8 @@ const dashboardRoutes = [
         component: Users,
         layout: "/admin",
         childOf: "Management",
-        isNested: true
+        isNested: true,
+        isDivided: false
     },
     {
         path: "/bikes",
@@ -67,43 +71,8 @@ const dashboardRoutes = [
         component: Bikes,
         layout: "/admin",
         childOf: "Management",
-        isNested: true
-    },
-    {
-        path: "/payments",
-        name: "Payments",
-        icon: PaymentIcon,
-        component: Payments,
-        layout: "/admin",
-        childOf: "Management",
-        isNested: true
-    },
-    {
-        path: "/reports",
-        name: "User Reports",
-        icon: ReportIcon,
-        component: Reports,
-        layout: "/admin",
-        childOf: "Management",
-        isNested: true
-    },
-    {
-        path: "/transactions",
-        name: "Transactions",
-        icon: LocalAtmIcon,
-        component: Transactions,
-        layout: "/admin",
-        childOf: "Management",
-        isNested: true
-    },
-    {
-        path: "/usages",
-        name: "Usages",
-        icon: StreetviewIcon,
-        component: Usages,
-        layout: "/admin",
-        childOf: "Management",
-        isNested: true
+        isNested: true,
+        isDivided: false
     },
     {
         path: "/zones",
@@ -112,7 +81,48 @@ const dashboardRoutes = [
         component: Zones,
         layout: "/admin",
         childOf: "Management",
-        isNested: true
+        isNested: true,
+        isDivided: true
+    },
+    {
+        path: "/usages",
+        name: "Usages",
+        icon: StreetviewIcon,
+        component: Usages,
+        layout: "/admin",
+        childOf: "Management",
+        isNested: true,
+        isDivided: false
+    },
+    {
+        path: "/payments",
+        name: "Payments",
+        icon: PaymentIcon,
+        component: Payments,
+        layout: "/admin",
+        childOf: "Management",
+        isNested: true,
+        isDivided: false
+    },
+    {
+        path: "/transactions",
+        name: "Transactions",
+        icon: LocalAtmIcon,
+        component: Transactions,
+        layout: "/admin",
+        childOf: "Management",
+        isNested: true,
+        isDivided: true
+    },
+    {
+        path: "/reports",
+        name: "User Reports",
+        icon: ReportIcon,
+        component: Reports,
+        layout: "/admin",
+        childOf: "Management",
+        isNested: true,
+        isDivided: false
     },
 ];
 
