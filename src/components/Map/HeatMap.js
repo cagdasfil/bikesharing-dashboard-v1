@@ -18,7 +18,7 @@ class HeatMap extends PureComponent {
             lat:38.497455,
             lng:27.113452,
             zoom:15,
-            start:{
+            heatMapPoints:{
                 type: "FeatureCollection",
                 features:[]
             }
@@ -44,10 +44,10 @@ class HeatMap extends PureComponent {
                     }
                 };
                 self.setState({
-                    start:{
-                        ...self.state.start,
+                    heatMapPoints:{
+                        ...self.state.heatMapPoints,
                         features:[
-                            ...self.state.start.features,
+                            ...self.state.heatMapPoints.features,
                             feature
                         ]
                     }
@@ -67,7 +67,7 @@ class HeatMap extends PureComponent {
         this.map.on("load",()=>{
             this.map.addSource("point",{
                 type:"geojson",
-                data:this.state.start,
+                data:this.state.heatMapPoints,
                 buffer:0
             });
         
@@ -107,7 +107,7 @@ class HeatMap extends PureComponent {
     })
     }
     componentDidUpdate(){
-        this.map.getSource("point").setData(this.state.start);
+        this.map.getSource("point").setData(this.state.heatMapPoints);
     }
     render() {
         return (
