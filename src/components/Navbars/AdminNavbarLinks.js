@@ -28,8 +28,9 @@ import styles from "assets/jss/material-dashboard-react/components/headerLinksSt
 
 const useStyles = makeStyles(styles);
 
-export default function AdminNavbarLinks() {
+export default function AdminNavbarLinks(props) {
   const [openManagement, setOpenManagement] = React.useState(null);
+  const [searchValue, setsearchValue] = React.useState("");
   const handleClickManagement = event => {
     if (openManagement && openManagement.contains(event.target)) {
       setOpenManagement(null);
@@ -37,6 +38,12 @@ export default function AdminNavbarLinks() {
       setOpenManagement(event.currentTarget);
     }
   };
+  const handleChange = (event) => {
+    setsearchValue(event.target.value);
+  };
+  const handleSearchClick = () => {
+    props.callBack(searchValue);
+  }
   const handleCloseManagement = () => {
     setOpenManagement(null);
   };
@@ -57,10 +64,11 @@ export default function AdminNavbarLinks() {
             placeholder: "Search",
             inputProps: {
               "aria-label": "Search"
-            }
+            },
+            onChange: handleChange
           }}
         />
-        <Button color="white" aria-label="edit" justIcon round>
+        <Button color="white" aria-label="edit" justIcon round onClick={handleSearchClick}>
           <Search />
         </Button>
       </div>
