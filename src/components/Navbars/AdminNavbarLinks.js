@@ -193,7 +193,7 @@ export default function AdminNavbarLinks() {
         simple={!(window.innerWidth > 959)}
         aria-label="Maps"
         className={classes.buttonLink}
-        component={Link} to="/admin/maps"
+        component={Link} to="/admin/map"
       >
         <MapIcon className={classes.icons} />
         <Hidden mdUp implementation="css">
