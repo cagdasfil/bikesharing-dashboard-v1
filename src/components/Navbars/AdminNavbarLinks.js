@@ -11,7 +11,7 @@ import Paper from "@material-ui/core/Paper";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Poppers from "@material-ui/core/Popper";
 import Divider from "@material-ui/core/Divider";
-
+import { Redirect } from "react-router-dom";
 //icons
 import Dashboard from "@material-ui/icons/Dashboard";
 import Search from "@material-ui/icons/Search";
@@ -48,7 +48,8 @@ export default function AdminNavbarLinks(props) {
     setOpenManagement(null);
   };
   const handleLogout = () => {
-    //TODO
+    localStorage.clear("jwt");
+    window.location.href="/login"
     console.log("logged-out")
   }
   const classes = useStyles();
@@ -201,7 +202,7 @@ export default function AdminNavbarLinks(props) {
         simple={!(window.innerWidth > 959)}
         aria-label="Maps"
         className={classes.buttonLink}
-        component={Link} to="/admin/maps"
+        component={Link} to="/admin/map"
       >
         <MapIcon className={classes.icons} />
         <Hidden mdUp implementation="css">
