@@ -18,17 +18,17 @@ export default function Footer(props) {
         <div className={classes.left}>
           <List className={classes.list}>
             <ListItem className={classes.inlineBlock}>
-              <a href="https://aykutyrdm.github.io/bikesharing-intro-web-site/" className={classes.block}>
+              <a href="http://senior.ceng.metu.edu.tr/2020/bikesharing/" className={classes.block}>
                 HOME
               </a>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
-              <a href="https://aykutyrdm.github.io/bikesharing-intro-web-site/" className={classes.block}>
+              <a href="http://senior.ceng.metu.edu.tr/2020/bikesharing/" className={classes.block}>
                 ABOUT US
               </a>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
-              <a href="https://aykutyrdm.github.io/bikesharing-intro-web-site/" className={classes.block}>
+              <a href="http://senior.ceng.metu.edu.tr/2020/bikesharing/" className={classes.block}>
                 CONTACT US
               </a>
             </ListItem>
@@ -38,7 +38,7 @@ export default function Footer(props) {
           <span>
             &copy; {1900 + new Date().getYear()}{" "}
             <a
-              href="https://aykutyrdm.github.io/bikesharing-intro-web-site/"
+              href="http://senior.ceng.metu.edu.tr/2020/bikesharing/"
               target="_blank"
               className={classes.a}
             >
