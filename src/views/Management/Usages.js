@@ -67,20 +67,23 @@ export default function Usages() {
 
     function findUserName(userId) {
         for (let i = 0; i < users.length; i++)
-            if (users[i].id === userId)
+            if (users[i].id && users[i].id === userId)
                 return users[i].name;
+        return 'deleted!'
     }
 
     function findZoneName(zoneId) {
         for (let i = 0; i < zones.length; i++)
-            if (zones[i].id === zoneId)
+            if (zones[i].id && zones[i].id === zoneId)
                 return zones[i].name;
+        return 'deleted!'
     }
 
     function findBikeBarcode(bikeId) {
-        for (let i = 0; i < zones.length; i++)
-            if (bikes[i].id === bikeId)
+        for (let i = 0; i < bikes.length; i++)
+            if (bikes[i].id && bikes[i].id === bikeId)
                 return bikes[i].barcode;
+        return 'deleted!'
     }
 
     return (

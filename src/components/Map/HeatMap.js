@@ -6,7 +6,26 @@ import mapboxgl from 'mapbox-gl';
 import { func } from 'prop-types';
 import "./mapbox.css"
 import PubNub from 'pubnub';
-
+import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
+const filters = [
+    {
+      value: 'real',
+      label: 'Real-time',
+    },
+    {
+      value: 'daily',
+      label: 'Daily',
+    },
+    {
+      value: 'weekly',
+      label: 'Weekly',
+    },
+    {
+      value: 'monthly',
+      label: 'Monthly',
+    },
+  ];
 class HeatMap extends PureComponent {
     constructor(props){
         super(props);
@@ -21,12 +40,111 @@ class HeatMap extends PureComponent {
             heatMapPoints:{
                 type: "FeatureCollection",
                 features:[]
-            }
+            },
+            dailyPoints:{
+                type: "FeatureCollection",
+                features:[]
+            },
+            weeklyPoints:{
+                type: "FeatureCollection",
+                features:[]
+            },
+            monthlyPoints:{
+                type: "FeatureCollection",
+                features:[]
+            },
+            filter:"real",
         }
         mapboxgl.accessToken = this.props.mapbox;
        
     }
-    componentWillMount(){
+    handleChange = (event) => {
+        this.setState({filter:event.target.value})
+      };
+
+    async componentWillMount(){
+        let usages = null;
+        usages = localStorage.getItem("usages");
+        usages = JSON.parse(usages);
+        if ( usages ==="null" || usages === null){
+
+        }
+        else{
+            let dailyPoints = {
+                type: "FeatureCollection",
+                features:[]
+            }
+            let weeklyPoints = {
+                type: "FeatureCollection",
+                features:[]
+            }
+            let monthlyPoints = {
+                type: "FeatureCollection",
+                features:[]
+            }
+            const currentDate = new Date();
+            usages.map(usage=>{
+                var usageDate = new Date(usage.createdAt);
+                if(usageDate.getDate() != currentDate.getDate()){
+
+                }
+                else if(usageDate.getMonth() != currentDate.getMonth()){
+                    
+                }
+                else if(usageDate.getFullYear() != currentDate.getFullYear()){
+                    
+                }
+                else{
+                    console.log(usage.coords)
+                    usage.coords.map(point =>{
+                        
+                        let feature = {
+                            type:"Feature",
+                            properties:{},
+                            geometry:{
+                                type:"Point",
+                                coordinates: point
+                            }
+                        };
+                        dailyPoints.features.push(feature);
+                        
+                    })
+                }
+                var diffDays = Math.ceil((currentDate-usageDate)/(1000*60*60*24))
+                if(diffDays<=7){
+                    usage.coords.map(point =>{
+                        let feature = {
+                            type:"Feature",
+                            properties:{},
+                            geometry:{
+                                type:"Point",
+                                coordinates: point
+                            }
+                        };
+                        weeklyPoints.features.push(feature);
+                    })
+                    
+                }
+                if(diffDays<=30){
+                    usage.coords.map(point =>{
+                        let feature = {
+                            type:"Feature",
+                            properties:{},
+                            geometry:{
+                                type:"Point",
+                                coordinates: point
+                            }
+                        };
+                        monthlyPoints.features.push(feature);
+                    })
+                }
+        
+            })
+            this.setState({dailyPoints:dailyPoints});
+            this.setState({weeklyPoints:weeklyPoints});
+            this.setState({monthlyPoints:monthlyPoints});
+        }
+
         this.pubnub.subscribe({
             channels:["gpstrack"],
         })  
@@ -63,7 +181,7 @@ class HeatMap extends PureComponent {
             center: [lng, lat],
             zoom
             });
-
+        
         this.map.on("load",()=>{
             this.map.addSource("point",{
                 type:"geojson",
@@ -107,11 +225,41 @@ class HeatMap extends PureComponent {
     })
     }
     componentDidUpdate(){
-        this.map.getSource("point").setData(this.state.heatMapPoints);
+        if(this.state.filter==="real"){
+            this.map.getSource("point").setData(this.state.heatMapPoints);
+        }
+        else if(this.state.filter==="daily"){
+            this.map.getSource("point").setData(this.state.dailyPoints);
+        }
+        else if(this.state.filter==="weekly"){
+            this.map.getSource("point").setData(this.state.weeklyPoints);
+        }
+        else {
+            this.map.getSource("point").setData(this.state.monthlyPoints);
+        }
+        
+        
     }
     render() {
         return (
+            
+            
+            
            <div>
+               <TextField
+              id="standard-select-currency"
+              select
+              label="Select"
+              value={this.state.filter}
+              onChange={this.handleChange}
+              helperText="You can change heatmap option"
+            >
+              {filters.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
                <div ref={el => {this.mapContainer = el}} style={{position:'absolute',height:"75%",width:"75%"}} />
            </div>   
         );
