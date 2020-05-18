@@ -30,7 +30,7 @@ import styles from "assets/jss/material-dashboard-react/components/myTableStyle.
 
 const useStyles = makeStyles(styles);
 
-export default function Bikes() {
+export default function Bikes(props) {
 
     const [bikes, setBikes] = useState([]);
     const [zones, setZones] = useState([]);
@@ -71,18 +71,24 @@ export default function Bikes() {
 
     const render = loading ? [["...Loading"]] : (
         bikes.map(bike => {
-            return [
-                <DeleteButton collection='bikes' objectId={bike.id} />,
-                bike.barcode,
-                findZoneName(bike.lastZoneId),
-                bike.isAvailable
-                    ?
-                    <Primary>
-                        <CheckIcon style={{ margin: '0 0 0 10px' }} />
-                    </Primary>
-                    :
-                    <CloseIcon style={{ margin: '0 0 0 10px' }} />
-            ]
+            const zoneName = findZoneName(bike.lastZoneId);
+            if(bike.barcode.includes(props.searchValue) || zoneName.includes(props.searchValue)){
+                return [
+                    <DeleteButton collection='bikes' objectId={bike.id} />,
+                    bike.barcode,
+                    zoneName,
+                    bike.isAvailable
+                        ?
+                        <Primary>
+                            <CheckIcon style={{ margin: '0 0 0 10px' }} />
+                        </Primary>
+                        :
+                        <CloseIcon style={{ margin: '0 0 0 10px' }} />
+                ]
+            }
+            else{
+                return null;
+            }
         })
     )
 

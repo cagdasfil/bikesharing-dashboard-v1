@@ -12,6 +12,8 @@
     "google-map-react": "^1.1.7",
     "history": "4.9.0",
     "mapbox-gl": "^1.10.0",
+    "leaflet": "^1.6.0",
+    "leaflet-draw": "^1.0.4",
     "perfect-scrollbar": "1.4.0",
     "prop-types": "15.7.2",
     "pubnub": "^4.27.6",

@@ -43,7 +43,7 @@ export default function Header(props) {
           </Button>
         </div>
         <Hidden smDown implementation="css">
-          <AdminNavbarLinks />
+          <AdminNavbarLinks callBack={props.callBack}/>
         </Hidden>
         <Hidden mdUp implementation="css">
           <IconButton

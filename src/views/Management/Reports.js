@@ -19,7 +19,7 @@ import styles from "assets/jss/material-dashboard-react/components/myTableStyle.
 
 const useStyles = makeStyles(styles);
 
-export default function Reports() {
+export default function Reports(props) {
 
     const [reports, setReports] = useState([]);
     const [users, setUsers] = useState([]);
@@ -60,20 +60,27 @@ export default function Reports() {
 
     const render = loading ? [["...Loading"]] : (
         reports.map(report => {
-            const userName = findUserName(report.userId);
-            return [
-                userName,
-                report.title,
-                report.status,
-                <ReportButton operation="details" report={report} />,
-                <ReportButton
-                    operation="update"
-                    report={report}
-                    formControlProps={{
-                        onClick: handleUpdateClick(report, userName)
-                    }}
-                />,
-            ]
+            const username = findUserName(report.userId);
+            if (username.includes(props.searchValue) ||
+                report.title.includes(props.searchValue) ||
+                report.status.includes(props.searchValue)) {
+                return [
+                    username,
+                    report.title,
+                    report.status,
+                    <ReportButton operation="details" report={report} />,
+                    <ReportButton
+                        operation="update"
+                        report={report}
+                        formControlProps={{
+                            onClick: handleUpdateClick(report, username)
+                        }}
+                    />
+                ]
+            }
+            else {
+                return null
+            }
         })
     )
 

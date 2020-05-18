@@ -14,7 +14,7 @@ import styles from "assets/jss/material-dashboard-react/components/myTableStyle.
 
 const useStyles = makeStyles(styles);
 
-export default function Users() {
+export default function Users(props) {
 
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -34,15 +34,24 @@ export default function Users() {
 
     const render = loading ? [["...Loading"]] : (
         users.map(user => {
-            return [
-                user.username,
-                user.email,
-                user.name,
-                user.surname,
-                user.role.name,
-                <UserButton operation="block" user={user} />,
-                <UserButton operation="set-admin" user={user} />
-            ]
+            if(user.username.includes(props.searchValue) || 
+                    user.email.includes(props.searchValue) ||
+                    user.name.includes(props.searchValue) ||
+                    user.surname.includes(props.searchValue) ||
+                    user.role.name.includes(props.searchValue) ){
+                return [
+                    user.username,
+                    user.email,
+                    user.name,
+                    user.surname,
+                    user.role.name,
+                    <UserButton operation="block" user={user} />,
+                    <UserButton operation="set-admin" user={user} />
+                ]
+            }
+            else{
+                return null
+            }
         })
     )
 

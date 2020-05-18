@@ -13,7 +13,7 @@ import styles from "assets/jss/material-dashboard-react/components/myTableStyle.
 
 const useStyles = makeStyles(styles);
 
-export default function Usages() {
+export default function Usages(props) {
 
     const [payments, setPayments] = useState([]);
     const [transactions, setTransactions] = useState([]);
@@ -63,19 +63,31 @@ export default function Usages() {
         payments.map(payment => {
             const usage = payment.usage;
             const usageTransactions = findTransactions(usage._id)
-            return [
-                findUserName(usage.userId),
-                findBikeBarcode(usage.bikeId),
-                findZoneName(usage.startZoneId),
-                findZoneName(usage.endZoneId),
-                usage.createdAt,
-                usage.updatedAt,
-                payment.totalFee.toFixed(2),
-                (payment.totalFee - payment.totalPaid).toFixed(2),
-                <UsageButton
-                    transactions={usageTransactions}
-                />
-            ]
+            const username = findUserName(usage.userId);
+            const bikeBarcode = findBikeBarcode(usage.bikeId);
+            const startZoneName = findZoneName(usage.startZoneId);
+            const endZoneName = findZoneName(usage.endZoneId);
+            if (username.includes(props.searchValue) ||
+                bikeBarcode.includes(props.searchValue) ||
+                startZoneName.includes(props.searchValue) ||
+                endZoneName.includes(props.searchValue)) {
+                return [
+                    username,
+                    bikeBarcode,
+                    startZoneName,
+                    endZoneName,
+                    usage.createdAt,
+                    usage.updatedAt,
+                    payment.totalFee.toFixed(2),
+                    (payment.totalFee - payment.totalPaid).toFixed(2),
+                    <UsageButton
+                        transactions={usageTransactions}
+                    />
+                ]
+            }
+            else {
+                return null
+            }
         })
     )
 

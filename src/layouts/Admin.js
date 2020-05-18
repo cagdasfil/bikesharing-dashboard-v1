@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from 'react';
 import { Switch, Route, Redirect } from "react-router-dom";
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
@@ -19,23 +19,7 @@ import logo from "assets/img/logo.png";
 
 let ps;
 
-const switchRoutes = (
-  <Switch>
-    {routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            component={prop.component}
-            key={key}
-          />
-        );
-      }
-      return null;
-    })}
-    <Redirect from="/admin" to="/admin/dashboard" />
-  </Switch>
-);
+
 
 const useStyles = makeStyles(styles);
 
@@ -47,8 +31,29 @@ export default function Admin({ ...rest }) {
   // states and functions
   const color = "blue"
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [searchValue, setSearchValue] = React.useState("");
 
+  const switchRoutes = (
+    <Switch>
+      {routes.map((prop, key) => {
+        if (prop.layout === "/admin") {
+          return (
+            <Route
+              path={prop.layout + prop.path}
+              render={()=><prop.component searchValue={searchValue}/>}
+              key={key}
+            />
+          );
+        }
+        return null;
+      })}
+      <Redirect from="/admin" to="/admin/dashboard" />
+    </Switch>
+  );
 
+  const callBack = (returnedValue) => {
+    setSearchValue(returnedValue);
+  };
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -94,6 +99,7 @@ export default function Admin({ ...rest }) {
         <Navbar
           routes={routes}
           handleDrawerToggle={handleDrawerToggle}
+          callBack={callBack}
           {...rest}
         />
         {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
