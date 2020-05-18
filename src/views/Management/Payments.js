@@ -41,15 +41,43 @@ export default function Payments(props) {
     const render = loading ? [["...Loading"]] : (
         payments.map(payment => {
             const username = findUserName(payment.userId) || "";
-            if(username.includes(props.searchValue)){
-                return [
-                    username,
-                    payment.totalFee.toFixed(2),
-                    (payment.totalFee - payment.totalPaid).toFixed(2)
-                ]
+            if(props.searchValue.includes("<")){
+                const value = parseFloat(props.searchValue.substr(1));
+                if(payment.totalFee < value){
+                    return [
+                        username,
+                        payment.totalFee.toFixed(2),
+                        (payment.totalFee - payment.totalPaid).toFixed(2)
+                    ]
+                }
+                else{
+                    return null;
+                }
+            }
+            else if(props.searchValue.includes(">")){
+                const value = parseFloat(props.searchValue.substr(1));
+                if(payment.totalFee > value){
+                    return [
+                        username,
+                        payment.totalFee.toFixed(2),
+                        (payment.totalFee - payment.totalPaid).toFixed(2)
+                    ]
+                }
+                else{
+                    return null;
+                }
             }
             else{
-                return null
+                if(username.includes(props.searchValue)){
+                    return [
+                        username,
+                        payment.totalFee.toFixed(2),
+                        (payment.totalFee - payment.totalPaid).toFixed(2)
+                    ]
+                }
+                else{
+                    return null
+                }
             }
         })
     )
