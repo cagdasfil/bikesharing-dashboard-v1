@@ -13,7 +13,7 @@ import styles from "assets/jss/material-dashboard-react/components/myTableStyle.
 
 const useStyles = makeStyles(styles);
 
-export default function Usages() {
+export default function Usages(props) {
 
     const [usages, setUsages] = useState([]);
     const [users, setUsers] = useState([]);
@@ -54,14 +54,26 @@ export default function Usages() {
 
     const render = loading ? [["...Loading"]] : (
         usages.map(usage => {
-            return [
-                findUserName(usage.userId),
-                findBikeBarcode(usage.bikeId),
-                findZoneName(usage.startZoneId),
-                findZoneName(usage.endZoneId),
-                usage.createdAt,
-                usage.updatedAt
-            ]
+            const username = findUserName(usage.userId);
+            const bikeBarcode = findBikeBarcode(usage.bikeId);
+            const startZoneName = findZoneName(usage.startZoneId);
+            const endZoneName = findZoneName(usage.endZoneId);
+            if(username.includes(props.searchValue) || 
+                    bikeBarcode.includes(props.searchValue) ||
+                    startZoneName.includes(props.searchValue) ||
+                    endZoneName.includes(props.searchValue) ){
+                return [
+                    username,
+                    bikeBarcode,
+                    startZoneName,
+                    endZoneName,
+                    usage.createdAt,
+                    usage.updatedAt
+                ]
+            }
+            else{
+                return null
+            }
         })
     )
 

@@ -13,7 +13,7 @@ import styles from "assets/jss/material-dashboard-react/components/myTableStyle.
 
 const useStyles = makeStyles(styles);
 
-export default function Transactions() {
+export default function Transactions(props) {
 
     const [transactions, setTransactions] = useState([]);
     const [users, setUsers] = useState([]);
@@ -40,11 +40,18 @@ export default function Transactions() {
 
     const render = loading ? [["...Loading"]] : (
         transactions.map(transaction => {
-            return [
-                findUserName(transaction.userId),
-                transaction.operationType,
-                transaction.details.transactionAmount.toFixed(2)
-            ]
+            const username = findUserName(transaction.userId);
+            if(username.includes(props.searchValue) || 
+                    transaction.operationType.includes(props.searchValue)){
+                return [
+                    findUserName(transaction.userId),
+                    transaction.operationType,
+                    transaction.details.transactionAmount.toFixed(2)
+                ]
+            }
+            else{
+                return null
+            }  
         })
     )
 

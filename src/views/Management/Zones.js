@@ -13,7 +13,7 @@ import styles from "assets/jss/material-dashboard-react/components/myTableStyle.
 
 const useStyles = makeStyles(styles);
 
-export default function Zones() {
+export default function Zones(props) {
 
     const [zones, setZones] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -36,7 +36,14 @@ export default function Zones() {
 
     const render = loading ? [["...Loading"]] : (
         zones.map(zone => {
-            return [zone.name, zone.address]
+            if(zone.name.includes(props.searchValue) ||
+                    zone.address.includes(props.searchValue)){
+                return [zone.name, zone.address];
+            }
+            else{
+                return null;
+            }
+            
         })
     )
 
