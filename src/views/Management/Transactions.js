@@ -43,7 +43,9 @@ export default function Transactions() {
             return [
                 findUserName(transaction.userId),
                 transaction.operationType,
-                transaction.details.transactionAmount.toFixed(2)
+                transaction.details.transactionAmount.toFixed(2),
+                transaction.details.balanceBefore.toFixed(2),
+                transaction.details.balanceAfter.toFixed(2)
             ]
         })
     )
@@ -68,7 +70,9 @@ export default function Transactions() {
                                 tableHead={[
                                     "User",
                                     "Type",
-                                    "Amount"
+                                    "Amount",
+                                    "Balance Before",
+                                    "Balance After"
                                 ]}
                                 tableData={render}
                             />

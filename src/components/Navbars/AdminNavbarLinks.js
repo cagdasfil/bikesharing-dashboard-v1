@@ -154,14 +154,6 @@ export default function AdminNavbarLinks() {
                     <MenuItem
                       onClick={handleCloseManagement}
                       className={classes.dropdownItem}
-                      component={Link} to="/admin/payments"
-                    >
-
-                      Payments
-                    </MenuItem>
-                    <MenuItem
-                      onClick={handleCloseManagement}
-                      className={classes.dropdownItem}
                       component={Link} to="/admin/transactions"
                     >
                       Transactions

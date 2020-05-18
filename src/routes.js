@@ -5,7 +5,6 @@ import RoomIcon from '@material-ui/icons/Room';
 import PersonIcon from '@material-ui/icons/Person';
 import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
-import PaymentIcon from '@material-ui/icons/Payment';
 import ReportIcon from '@material-ui/icons/Report';
 import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import StreetviewIcon from '@material-ui/icons/Streetview';
@@ -17,7 +16,6 @@ import Maps from "views/Maps/Maps.js"
 import Profile from "views/Profile/Profile.js"
 import Bikes from "views/Management/Bikes.js"
 import Users from "views/Management/Users.js"
-import Payments from "views/Management/Payments.js"
 import Reports from "views/Management/Reports.js"
 import Transactions from "views/Management/Transactions.js"
 import Usages from "views/Management/Usages.js"
@@ -89,16 +87,6 @@ const dashboardRoutes = [
         name: "Usages",
         icon: StreetviewIcon,
         component: Usages,
-        layout: "/admin",
-        childOf: "Management",
-        isNested: true,
-        isDivided: false
-    },
-    {
-        path: "/payments",
-        name: "Payments",
-        icon: PaymentIcon,
-        component: Payments,
         layout: "/admin",
         childOf: "Management",
         isNested: true,

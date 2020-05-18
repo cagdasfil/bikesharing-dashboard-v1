@@ -8,24 +8,16 @@ import Tooltip from "@material-ui/core/Tooltip";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
-import Slide from '@material-ui/core/Slide';
-
-import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 import tooltipStyles from "assets/jss/material-dashboard-react/tooltipStyle.js";
 
 // colors
 import { purple } from "@material-ui/core/colors";
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
 
-const useStyles = makeStyles(styles);
 const toolTipUseStyles = makeStyles(tooltipStyles);
 
 export default function UserReportButton(props) {
 
-    const classes = useStyles();
     const toolTipClasses = toolTipUseStyles();
 
     const { operation, report, formControlProps } = props;
@@ -72,7 +64,6 @@ export default function UserReportButton(props) {
             id="tooltip-top"
             title="Update"
             placement="top"
-            classes={{ tooltip: toolTipClasses.tooltip }}
         >
             <IconButton size="small"
                 {...formControlProps}
