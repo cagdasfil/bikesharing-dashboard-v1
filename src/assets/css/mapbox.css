@@ -5,3 +5,14 @@
     left: 0;
     bottom: 0;
     }
+.sidebarStyle {
+    display: inline-block;
+    position: relative;
+    color: #ffffff;
+    width: 61vw;
+    height: 90vh;
+    z-index: 1 !important;
+    overflow: scroll;
+    font-weight: bold;
+    }
+         

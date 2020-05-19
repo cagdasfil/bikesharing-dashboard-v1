@@ -251,7 +251,7 @@ class HeatMap extends PureComponent {
 
 
 
-            <div>
+            <div className='sidebarStyle'>
                 <TextField
                     id="standard-select-currency"
                     select
@@ -266,7 +266,8 @@ class HeatMap extends PureComponent {
                         </MenuItem>
                     ))}
                 </TextField>
-                <div ref={el => { this.mapContainer = el }} style={{ position: 'absolute', height: "75%", width: "75%" }} />
+                <div ref={el => { this.mapContainer = el }} style={{ position: 'relative', width: "60vw",
+    height: "70vh"}} />
             </div>
         );
     }

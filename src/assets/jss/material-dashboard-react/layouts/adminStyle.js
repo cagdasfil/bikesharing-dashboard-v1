@@ -3,18 +3,18 @@ import {
   transition,
   container
 } from "assets/jss/material-dashboard-react.js";
+import { Hidden } from "@material-ui/core";
 
 const appStyle = theme => ({
   wrapper: {
     position: "relative",
     top: "0",
-    height: "100vh"
+    height: "100vh",
   },
   mainPanel: {
     [theme.breakpoints.up("md")]: {
       width: `calc(100% - ${drawerWidth}px)`
     },
-    overflow: "auto",
     position: "relative",
     float: "right",
     ...transition,
@@ -25,7 +25,7 @@ const appStyle = theme => ({
   content: {
     marginTop: "70px",
     padding: "30px 15px",
-    minHeight: "calc(100vh - 123px)"
+    minHeight: "calc(100vh - 123px)",
   },
   container,
   map: {
