@@ -52,6 +52,7 @@ class HeatMap extends PureComponent {
                 features: []
             },
             filter: "real",
+            usages: []
         }
         mapboxgl.accessToken = this.props.mapbox;
 
@@ -60,14 +61,16 @@ class HeatMap extends PureComponent {
         this.setState({ filter: event.target.value })
     };
 
-    async componentWillMount() {
-        let usages = null;
-        usages = localStorage.getItem("usages");
-        usages = JSON.parse(usages);
-        if (usages === "null" || usages === null) {
 
-        }
-        else {
+    componentDidMount() {
+
+        fetch('http://35.189.94.121/usages', {
+            method: 'get'
+        }).then(response => {
+            return response.json();
+        }).then(usagesData => {
+            this.setState({ usages: usagesData });
+        }).then(() => {
             let dailyPoints = {
                 type: "FeatureCollection",
                 features: []
@@ -81,7 +84,7 @@ class HeatMap extends PureComponent {
                 features: []
             }
             const currentDate = new Date();
-            usages.map(usage => {
+            this.state.usages.map(usage => {
                 var usageDate = new Date(usage.createdAt);
                 if (usageDate.getDate() != currentDate.getDate()) {
 
@@ -141,98 +144,103 @@ class HeatMap extends PureComponent {
             this.setState({ dailyPoints: dailyPoints });
             this.setState({ weeklyPoints: weeklyPoints });
             this.setState({ monthlyPoints: monthlyPoints });
-        }
 
-        this.pubnub.subscribe({
-            channels: ["gpstrack"],
-        })
 
-        const self = this;
-        this.pubnub.addListener({
-            message: function (msg) {
-                localStorage.setItem("message", JSON.stringify(msg.message.coords))
-                let feature = {
-                    type: "Feature",
-                    properties: {},
-                    geometry: {
-                        type: "Point",
-                        coordinates: msg.message.coords
-                    }
-                };
-                self.setState({
-                    heatMapPoints: {
-                        ...self.state.heatMapPoints,
-                        features: [
-                            ...self.state.heatMapPoints.features,
-                            feature
-                        ]
-                    }
-                })
-            },
-        })
-    }
-    componentDidMount() {
-        const { lng, lat, zoom } = this.state;
-        this.map = new mapboxgl.Map({
-            container: this.mapContainer,
-            style: 'mapbox://styles/mapbox/streets-v11',
-            center: [lng, lat],
-            zoom
-        });
+            this.pubnub.subscribe({
+                channels: ["gpstrack"],
+            })
 
-        this.map.on("load", () => {
-            this.map.addSource("point", {
-                type: "geojson",
-                data: this.state.heatMapPoints,
-                buffer: 0
+            const self = this;
+            this.pubnub.addListener({
+                message: function (msg) {
+                    localStorage.setItem("message", JSON.stringify(msg.message.coords))
+                    let feature = {
+                        type: "Feature",
+                        properties: {},
+                        geometry: {
+                            type: "Point",
+                            coordinates: msg.message.coords
+                        }
+                    };
+                    self.setState({
+                        heatMapPoints: {
+                            ...self.state.heatMapPoints,
+                            features: [
+                                ...self.state.heatMapPoints.features,
+                                feature
+                            ]
+                        }
+                    })
+                },
+            })
+
+        }).then(() => {
+
+            const { lng, lat, zoom } = this.state;
+            this.map = new mapboxgl.Map({
+                container: this.mapContainer,
+                style: 'mapbox://styles/mapbox/streets-v11',
+                center: [lng, lat],
+                zoom
             });
 
-            this.map.addLayer({
-                id: "taxi",
-                type: "heatmap",
-                source: "point",
-                paint: {
-                    "heatmap-intensity": {
-                        stops: [[5, 1], [7, 3]]
-                    },
-                    "heatmap-color": [
-                        "interpolate",
-                        ["linear"],
-                        ["heatmap-density"],
-                        0,
-                        "rgba(33,102,172,0)",
-                        0.2,
-                        "rgb(103,169,207)",
-                        0.4,
-                        "rgb(209,229,240)",
-                        0.6,
-                        "rgb(253,219,199)",
-                        0.8,
-                        "rgb(239,138,98)",
-                        1,
-                        "rgb(178,24,43)"],
-                    "heatmap-radius": {
-                        stops: [[5, 2], [7, 20]]
-                    },
-                    "heatmap-opacity": {
-                        default: 1,
-                        stops: [[5, 1], [10, 0.5]]
+            this.map.on("load", () => {
+                this.map.addSource("point", {
+                    type: "geojson",
+                    data: this.state.heatMapPoints,
+                    buffer: 0
+                });
+
+                this.map.addLayer({
+                    id: "taxi",
+                    type: "heatmap",
+                    source: "point",
+                    paint: {
+                        "heatmap-intensity": {
+                            stops: [[5, 1], [7, 3]]
+                        },
+                        "heatmap-color": [
+                            "interpolate",
+                            ["linear"],
+                            ["heatmap-density"],
+                            0,
+                            "rgba(33,102,172,0)",
+                            0.2,
+                            "rgb(103,169,207)",
+                            0.4,
+                            "rgb(209,229,240)",
+                            0.6,
+                            "rgb(253,219,199)",
+                            0.8,
+                            "rgb(239,138,98)",
+                            1,
+                            "rgb(178,24,43)"],
+                        "heatmap-radius": {
+                            stops: [[5, 2], [7, 20]]
+                        },
+                        "heatmap-opacity": {
+                            default: 1,
+                            stops: [[5, 1], [10, 0.5]]
+                        }
                     }
-                }
-            });
+                });
+            })
+
         })
+
+
     }
     componentDidUpdate() {
-        if (this.state.filter === "real") {
+        if (this.map && this.state.filter === "real") {
             this.map.getSource("point").setData(this.state.heatMapPoints);
         }
-        else if (this.state.filter === "daily") {
+        else if (this.map && this.state.filter === "daily") {
             this.map.getSource("point").setData(this.state.dailyPoints);
         }
-        else if (this.state.filter === "weekly") {
+        else if (this.map && this.state.filter === "weekly") {
             this.map.getSource("point").setData(this.state.weeklyPoints);
         }
-        else {
+        else if (this.map) {
             this.map.getSource("point").setData(this.state.monthlyPoints);
         }
 
