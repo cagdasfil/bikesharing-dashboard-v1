@@ -1,9 +1,7 @@
 /* global google */
 /* eslint-disable no-undef */
 import React, { PureComponent } from 'react';
-import ReactDOM from 'react-dom';
 import mapboxgl from 'mapbox-gl';
-import { func } from 'prop-types';
 import "assets/css/mapbox.css"
 import PubNub from 'pubnub';
 import TextField from '@material-ui/core/TextField';

@@ -1,0 +1,73 @@
+.leaflet-container{
+    width: 100%;
+    height: 80vh;
+}
+
+
+.Mapping {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+  }
+
+  .FormBoxes {
+    margin: 0vh 0vh;
+    width: 10vh;
+    padding-left: 1vh;
+    border-radius: 1vh;
+    height: 3vh;
+  }
+
+  .FormBoxes2 {
+    margin: 0vh 0vh;
+    width: 25vh;
+    padding-left: 1vh;
+    border-radius: 1vh;
+    height: 3vh;
+  }
+
+  .Form{
+    
+    display: flex;
+    flex-direction: column;
+    
+
+    /*align-items: center;*/
+  }
+
+  .Setting {
+    margin: 2vh 3vh;
+    display: flex;
+    flex-direction: row;
+    height: 3vh;
+   
+  }
+
+  .Name {
+    background-color: #282c34;
+    color: white ;
+    margin: 0vh 0vh;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5vh;
+    }
+
+  .SetMargin{
+    margin: 1.5vh 3vh;
+    display: flex;
+    flex-direction: row;
+    padding-left: 1vh;
+    padding-right: 1vh;
+    border-radius: 1vh;
+    height: 3vh;
+  }
+
+  .FormLabels {
+    margin: 0vh 1vh;
+    font-size: medium;
+    font-weight: normal;
+  }
+  
