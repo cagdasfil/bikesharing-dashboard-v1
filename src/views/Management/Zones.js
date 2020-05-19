@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import { Icon, LatLng } from "leaflet";
 import { Button, Form } from "react-bootstrap";
 //import { Container, Row, Col } from 'reactstrap';
@@ -7,36 +6,16 @@ import { Map, Marker, Popup, TileLayer, Polygon } from "react-leaflet";
 import Draw from 'leaflet-draw';
 import "assets/css/map.css"
 import L from 'leaflet';
-import Zones from "components/ZonesTable/ZonesTable.js"
+//import $ from 'jquery';
+//window.$ = $;
+
+import Zones from "components/ZonesTable/ZonesTable.js";
+
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 
 
 console.log("WINDOW", window)
-
-
-const events = [{
-    title: 'Sport Thing',
-    description: 'the biggest sport thing ever',
-    type: 'Sports',
-    lat: 42.616841,
-    lng: -70.671173,
-    id: 'CAT',
-},
-{
-    title: 'Town Hall Meeting',
-    description: 'Come one come all',
-    type: 'Government',
-    lat: 42.619281,
-    lng: -70.669735,
-    id: 'DOG',
-}]
-
-
-
-
-
-
 
 export default class Mapping extends React.Component {
 
@@ -44,12 +23,11 @@ export default class Mapping extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            bi: [39.8909236, 32.7777734],
             rowsPerPage: 10,
             zone: [],
             gotData: false,
             geojsonLayer: [],
-            zoneName: "hi",
+            zoneName: "",
             zoneAddres: "",
             newZone: [],
             name: "",
@@ -63,8 +41,9 @@ export default class Mapping extends React.Component {
             delete: false,
             isUpdate: false,
             updateCoordinates: [],
-            jwt: localStorage.jwt
+            jwt: localStorage.jwt,
         };
+
         this.handleZoneData = this.handleZoneData.bind(this);
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -81,15 +60,11 @@ export default class Mapping extends React.Component {
     }
 
 
-
-
     handleZoneData = (data) => {
-        let zoneData = [];
         let dgn = [];
         this.setState({ dataBaseZones: [] });
         for (var i in data) {
             dgn.push([data[i]]);
-            //zoneData.push(dgn)
             this.state.dataBaseZones.push({
                 name: data[i].name,
                 address: data[i].address,
@@ -97,15 +72,13 @@ export default class Mapping extends React.Component {
                 coordinates: data[i].polygon.geometry.coordinates[0],
                 leaflet_id: ""
             });
-
-            console.log('1--1:', data[i]);
         }
 
         this.setState({ zone: dgn });
 
         this.setState({ gotData: false });
-    };
 
+    };
 
     getData() {
         fetch('http://35.189.94.121/zones', {
@@ -165,7 +138,6 @@ export default class Mapping extends React.Component {
             },
             body: JSON.stringify({ zoneId: id, newCoordinates: [coord] })
         };
-        console.log('deneme', requestOptions.body)
         fetch('http://35.189.94.121/zones/updatePolygon', requestOptions)
             .then(async response => {
                 const data = await response.json();
@@ -197,6 +169,7 @@ export default class Mapping extends React.Component {
                 .openOn(map);
         }
 
+        //map.on('click', onMapClick);
 
 
         map.addLayer(drawnItems);
@@ -217,12 +190,7 @@ export default class Mapping extends React.Component {
             },
         });
 
-
-
-
         map.addControl(drawControl);
-
-
         map.on('mouseover', (e) => {
             if (!this.state.gotData) {
                 for (var i = 0; i < this.state.zone.length; i++) {
@@ -232,49 +200,14 @@ export default class Mapping extends React.Component {
 
                 }
                 this.setState({ newDataBaseZones: this.state.dataBaseZones });
-                console.log('DATABASE', drawnItems);
                 this.setState({ gotData: true });
             }
         });
 
-        var update = [];
-
 
 
         map.on(L.Draw.Event.CREATED, (e) => {
-
-
-
-            const type = e.layerType;
             const layer = e.layer;
-            if (type === 'marker') {
-                layer.bindPopup('<object data="http://www.youtube.com/embed/W7qWa52k-nE" width="560" height="315"></object>', {
-                    maxWidth: 200
-                });
-            }
-
-            var customPopup = '<div className="Form">' +
-                '<form >' +
-                '<div>' +
-                '<div className="Setting">' +
-                '<Form.Label className="FormLabels">Name : </Form.Label>' +
-                '<input type="text" ' + (true ? 'value =' + this.state.zoneName.toString() : null) + ' onChange={this.handleChange} />' +
-                '<Form.Label className="FormLabels">Adress : </Form.Label>' +
-                '<input type="text" value=' + this.state.zoneName.toString() + ' onChange={this.handleChange} />' +
-                '<button type="button"  onclick={this.handleSubmit}>Create</button> <script>' + 'function AddRecord(){alert("Add it!");}' + '</script>' +
-                '</div>' +
-                '</div>' +
-                '</form>' +
-                '</div>';
-
-            var customOptions =
-            {
-                'maxWidth': '150',
-                'width': '50',
-                'className': 'popupCustom'
-            }
-
-
             console.log('LAYER ADDED:', layer)
 
 
@@ -283,11 +216,7 @@ export default class Mapping extends React.Component {
             }
 
 
-
             drawnItems.addLayer(layer);
-
-            console.log('GEO JSONNNN', drawnItems.toGeoJSON());
-            console.log('GET THEM LAYERS', drawnItems.getLayers());
 
             var allLayer = drawnItems.toGeoJSON().features;
             var LatLng = [];
@@ -306,11 +235,6 @@ export default class Mapping extends React.Component {
 
             this.setState({ newZone: zones });
 
-
-            console.log('NEW', drawnItems.getLayerId(layer));
-            console.log('NEW787', allLayer[0]);
-
-            console.log('ZONE', this.state.newZone)
         });
 
         map.on(L.Draw.Event.EDITED, (e) => {
@@ -340,19 +264,12 @@ export default class Mapping extends React.Component {
             }
 
             this.setState({ indexOf: index })
-
-            console.log('E', this.state.indexOf)
-
-
         });
 
         map.on(L.Draw.Event.DELETED, (e) => {
             console.log('DELETED', e)
             this.setState({ delete: true })
-
         });
-
-
     }
 
     ters(array) {
@@ -361,7 +278,6 @@ export default class Mapping extends React.Component {
             newArray[i].reverse();
 
         }
-        console.log('Array', newArray);
         return newArray;
     }
 
@@ -390,6 +306,7 @@ export default class Mapping extends React.Component {
     }
 
 
+
     update(id, coord) {
         const requestOptions = {
             method: 'PUT',
@@ -410,7 +327,6 @@ export default class Mapping extends React.Component {
                     const error = (data && data.message) || response.status;
                     return Promise.reject(error);
                 }
-
             })
             .catch(error => {
                 console.error('There was an error!', error);
@@ -429,9 +345,7 @@ export default class Mapping extends React.Component {
 
     handleClick(e) {
         console.log('n2', e);
-
     }
-
 
     render() {
         return (
@@ -552,5 +466,3 @@ export default class Mapping extends React.Component {
         );
     }
 }
-
-
