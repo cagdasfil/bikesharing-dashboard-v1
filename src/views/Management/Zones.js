@@ -2,11 +2,12 @@ import React from "react";
 import { Form } from "react-bootstrap";
 import {Map, Popup, TileLayer, Polygon } from "react-leaflet";
 import Draw from 'leaflet-draw';
-import "./map.css"
+import "../../assets/css/map.css"
 import L from 'leaflet';
 
 
-import Zones from "./Zones_table";
+import Zones from "../../components/ZonesTable/ZonesTable"
+
 
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";

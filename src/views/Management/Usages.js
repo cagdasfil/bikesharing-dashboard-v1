@@ -8,14 +8,15 @@ import Table from "components/Table/Table.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
-
+import UsageButton from "components/UsageButton/UsageButton.js"
 import styles from "assets/jss/material-dashboard-react/components/myTableStyle.js"
 
 const useStyles = makeStyles(styles);
 
-export default function Usages() {
+export default function Usages(props) {
 
-    const [usages, setUsages] = useState([]);
+    const [payments, setPayments] = useState([]);
+    const [transactions, setTransactions] = useState([]);
     const [users, setUsers] = useState([]);
     const [zones, setZones] = useState([]);
     const [bikes, setBikes] = useState([]);
@@ -23,12 +24,18 @@ export default function Usages() {
     const classes = useStyles();
 
     useEffect(() => {
-        fetch('http://35.189.94.121/usages', {
+        fetch('http://35.189.94.121/payments', {
             method: 'get'
-        }).then((response) => {
+        }).then(response => {
             return response.json();
-        }).then(usagesData => {
-            setUsages(usagesData)
+        }).then(paymentsData => {
+            setPayments(paymentsData)
+        }).then(() => fetch('http://35.189.94.121/transactions', {
+            method: 'get'
+        })).then(response => {
+            return response.json();
+        }).then(transactionsData => {
+            setTransactions(transactionsData)
         }).then(() => fetch('http://35.189.94.121/users', {
             method: 'get'
         })).then(response => {
@@ -53,34 +60,111 @@ export default function Usages() {
     }, []);
 
     const render = loading ? [["...Loading"]] : (
-        usages.map(usage => {
-            return [
-                findUserName(usage.userId),
-                findBikeBarcode(usage.bikeId),
-                findZoneName(usage.startZoneId),
-                findZoneName(usage.endZoneId),
-                usage.createdAt,
-                usage.updatedAt
-            ]
+        payments.map(payment => {
+            const usage = payment.usage;
+            const usageTransactions = findTransactions(usage._id)
+            const username = findUserName(usage.userId);
+            const bikeBarcode = findBikeBarcode(usage.bikeId);
+            const startZoneName = findZoneName(usage.startZoneId);
+            const endZoneName = findZoneName(usage.endZoneId);
+            if(props.searchValue.includes("<")){
+                const value = parseFloat(props.searchValue.substr(1));
+                if(payment.totalFee < value){
+                    return [
+                        username,
+                        bikeBarcode,
+                        startZoneName,
+                        endZoneName,
+                        usage.createdAt,
+                        usage.updatedAt,
+                        payment.totalFee.toFixed(2),
+                        (payment.totalFee - payment.totalPaid).toFixed(2),
+                        <UsageButton
+                            transactions={usageTransactions}
+                        />
+                    ]
+                }
+                else{
+                    return null;
+                }
+            }
+            else if(props.searchValue.includes(">")){
+                const value = parseFloat(props.searchValue.substr(1));
+                if(payment.totalFee > value){
+                    return [
+                        username,
+                        bikeBarcode,
+                        startZoneName,
+                        endZoneName,
+                        usage.createdAt,
+                        usage.updatedAt,
+                        payment.totalFee.toFixed(2),
+                        (payment.totalFee - payment.totalPaid).toFixed(2),
+                        <UsageButton
+                            transactions={usageTransactions}
+                        />
+                    ]
+                }
+                else{
+                    return null;
+                }
+            }
+            else{
+                if (username.includes(props.searchValue) ||
+                bikeBarcode.includes(props.searchValue) ||
+                startZoneName.includes(props.searchValue) ||
+                endZoneName.includes(props.searchValue)) {
+                    return [
+                        username,
+                        bikeBarcode,
+                        startZoneName,
+                        endZoneName,
+                        usage.createdAt,
+                        usage.updatedAt,
+                        payment.totalFee.toFixed(2),
+                        (payment.totalFee - payment.totalPaid).toFixed(2),
+                        <UsageButton
+                            transactions={usageTransactions}
+                        />
+                    ]
+                }
+                else {
+                    return null
+                }
+            }
         })
     )
 
     function findUserName(userId) {
         for (let i = 0; i < users.length; i++)
-            if (users[i].id === userId)
+            if (users[i].id && users[i].id === userId)
                 return users[i].name;
+        return 'deleted!'
     }
 
     function findZoneName(zoneId) {
         for (let i = 0; i < zones.length; i++)
-            if (zones[i].id === zoneId)
+            if (zones[i].id && zones[i].id === zoneId)
                 return zones[i].name;
+        return 'deleted!'
     }
 
     function findBikeBarcode(bikeId) {
-        for (let i = 0; i < zones.length; i++)
-            if (bikes[i].id === bikeId)
+        for (let i = 0; i < bikes.length; i++)
+            if (bikes[i].id && bikes[i].id === bikeId)
                 return bikes[i].barcode;
+        return 'deleted!'
+    }
+
+    function findTransactions(usageId) {
+        console.log(usageId)
+        let usageTransactions = [];
+        for (let i = 0; i < transactions.length; i++) {
+            let usage = transactions[i].details.usage;
+            if (usage && usage._id === usageId)
+                usageTransactions.push(transactions[i]);
+        }
+        return usageTransactions;
     }
 
     return (
@@ -100,7 +184,10 @@ export default function Usages() {
                                     "Start Zone",
                                     "End Zone",
                                     "Start Time",
-                                    "End Time"
+                                    "End Time",
+                                    "Total Fee",
+                                    "Remained Debt",
+                                    "Transactions"
                                 ]}
                                 tableData={render}
                             />

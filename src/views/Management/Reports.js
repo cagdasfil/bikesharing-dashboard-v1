@@ -8,16 +8,25 @@ import Table from "components/Table/Table.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
+import ReportButton from "components/ReportButton/ReportButton.js"
+import UpdateReport from "components/UpdateReport/UpdateReport.js"
 
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
+
+import Close from '@material-ui/icons/Close';
 import styles from "assets/jss/material-dashboard-react/components/myTableStyle.js"
 
 const useStyles = makeStyles(styles);
 
-export default function Reports() {
+export default function Reports(props) {
 
     const [reports, setReports] = useState([]);
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [updating, setUpdating] = useState(false);
+    const [updatingReport, setUpdatingReport] = useState(null);
+
     const classes = useStyles();
 
     useEffect(() => {
@@ -38,13 +47,40 @@ export default function Reports() {
         })
     }, []);
 
+    const handleUpdateClick = (report, userName) => (e) => {
+        setUpdatingReport({ ...report, userName: userName });
+        setUpdating(true);
+    }
+
+    const handleCancelClick = () => {
+        setUpdatingReport(null);
+        setUpdating(false);
+    }
+
+
     const render = loading ? [["...Loading"]] : (
         reports.map(report => {
-            return [
-                findUserName(report.userId),
-                report.title,
-                report.status
-            ]
+            const username = findUserName(report.userId);
+            if (username.includes(props.searchValue) ||
+                report.title.includes(props.searchValue) ||
+                report.status.includes(props.searchValue)) {
+                return [
+                    username,
+                    report.title,
+                    report.status,
+                    <ReportButton operation="details" report={report} />,
+                    <ReportButton
+                        operation="update"
+                        report={report}
+                        formControlProps={{
+                            onClick: handleUpdateClick(report, username)
+                        }}
+                    />
+                ]
+            }
+            else {
+                return null
+            }
         })
     )
 
@@ -68,7 +104,9 @@ export default function Reports() {
                                 tableHead={[
                                     "User",
                                     "Title",
-                                    "Status"
+                                    "Status",
+                                    "Details",
+                                    "Update"
                                 ]}
                                 tableData={render}
                             />
@@ -76,6 +114,45 @@ export default function Reports() {
                     </Card>
                 </GridItem>
             </GridContainer>
+
+            {updating
+                ? (
+                    <GridContainer>
+                        <GridItem xs={12} sm={12} md={12}>
+                            <Card >
+                                <CardHeader color="primary">
+                                    <h4 className={classes.cardTitleWhite}>Update User Report
+
+                                    <Tooltip
+                                            id="tooltip-top"
+                                            title="Close"
+                                            placement="top"
+                                        >
+                                            <IconButton
+                                                size="small"
+                                                aria-label="Add"
+                                                onClick={handleCancelClick}
+                                                className={classes.cardTitleWhite}
+                                                style={{ margin: '0 0 0 960px' }}
+                                            >
+                                                <Close />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </h4>
+                                </CardHeader>
+                                <CardBody>
+                                    <UpdateReport updatingReport={updatingReport} />
+                                </CardBody>
+
+                            </Card>
+                        </GridItem>
+                    </GridContainer>
+                )
+
+                :
+                null
+            }
+
         </div>
     );
 }

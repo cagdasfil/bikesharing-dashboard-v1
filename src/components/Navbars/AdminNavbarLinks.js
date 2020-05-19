@@ -28,8 +28,9 @@ import styles from "assets/jss/material-dashboard-react/components/headerLinksSt
 
 const useStyles = makeStyles(styles);
 
-export default function AdminNavbarLinks() {
+export default function AdminNavbarLinks(props) {
   const [openManagement, setOpenManagement] = React.useState(null);
+  const [searchValue, setsearchValue] = React.useState("");
   const handleClickManagement = event => {
     if (openManagement && openManagement.contains(event.target)) {
       setOpenManagement(null);
@@ -37,6 +38,12 @@ export default function AdminNavbarLinks() {
       setOpenManagement(event.currentTarget);
     }
   };
+  const handleChange = (event) => {
+    setsearchValue(event.target.value);
+  };
+  const handleSearchClick = () => {
+    props.callBack(searchValue);
+  }
   const handleCloseManagement = () => {
     setOpenManagement(null);
   };
@@ -58,10 +65,11 @@ export default function AdminNavbarLinks() {
             placeholder: "Search",
             inputProps: {
               "aria-label": "Search"
-            }
+            },
+            onChange: handleChange
           }}
         />
-        <Button color="white" aria-label="edit" justIcon round>
+        <Button color="white" aria-label="edit" justIcon round onClick={handleSearchClick}>
           <Search />
         </Button>
       </div>
@@ -126,7 +134,7 @@ export default function AdminNavbarLinks() {
                     >
                       Users
                     </MenuItem>
-                    <Divider light />
+
                     <MenuItem
                       onClick={handleCloseManagement}
                       className={classes.dropdownItem}
@@ -134,23 +142,24 @@ export default function AdminNavbarLinks() {
                     >
                       Bikes
                     </MenuItem>
-                    <Divider light />
+
                     <MenuItem
                       onClick={handleCloseManagement}
                       className={classes.dropdownItem}
-                      component={Link} to="/admin/payments"
+                      component={Link} to="/admin/zones"
                     >
-                      Payments
+                      Zones
                     </MenuItem>
                     <Divider light />
+
                     <MenuItem
                       onClick={handleCloseManagement}
                       className={classes.dropdownItem}
-                      component={Link} to="/admin/reports"
+                      component={Link} to="/admin/usages"
                     >
-                      User Reports
+                      Usages
                     </MenuItem>
-                    <Divider light />
+
                     <MenuItem
                       onClick={handleCloseManagement}
                       className={classes.dropdownItem}
@@ -159,21 +168,17 @@ export default function AdminNavbarLinks() {
                       Transactions
                     </MenuItem>
                     <Divider light />
+
                     <MenuItem
                       onClick={handleCloseManagement}
                       className={classes.dropdownItem}
-                      component={Link} to="/admin/usages"
+                      component={Link} to="/admin/reports"
                     >
-                      Usages
+                      User Reports
                     </MenuItem>
-                    <Divider light />
-                    <MenuItem
-                      onClick={handleCloseManagement}
-                      className={classes.dropdownItem}
-                      component={Link} to="/admin/zones"
-                    >
-                      Zones
-                    </MenuItem>
+
+
+
 
                   </MenuList>
                 </ClickAwayListener>

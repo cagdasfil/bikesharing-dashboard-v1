@@ -61,6 +61,7 @@ export default function Login() {
     //Check admin or user
     if(loginResponse.user.role.type === "admin"){
       localStorage.setItem("jwt", loginResponse.jwt);
+      localStorage.setItem("user", JSON.stringify(loginResponse.user));
       window.location.href="/admin/dashboard"
     }
     else{

@@ -13,7 +13,7 @@ import styles from "assets/jss/material-dashboard-react/components/myTableStyle.
 
 const useStyles = makeStyles(styles);
 
-export default function Transactions() {
+export default function Transactions(props) {
 
     const [transactions, setTransactions] = useState([]);
     const [users, setUsers] = useState([]);
@@ -40,11 +40,53 @@ export default function Transactions() {
 
     const render = loading ? [["...Loading"]] : (
         transactions.map(transaction => {
-            return [
-                findUserName(transaction.userId),
-                transaction.operationType,
-                transaction.details.transactionAmount.toFixed(2)
-            ]
+            const username = findUserName(transaction.userId);
+            if(props.searchValue.includes("<")){
+                const value = parseFloat(props.searchValue.substr(1));
+                if(transaction.details.transactionAmount < value){
+                    return [
+                        findUserName(transaction.userId),
+                        transaction.operationType,
+                        transaction.details.transactionAmount.toFixed(2),
+                        transaction.details.balanceBefore.toFixed(2),
+                        transaction.details.balanceAfter.toFixed(2)
+                    ]
+                }
+                else{
+                    return null;
+                }
+
+            }
+            else if(props.searchValue.includes(">")){
+                const value = parseFloat(props.searchValue.substr(1));
+                if(transaction.details.transactionAmount > value){
+                    return [
+                        findUserName(transaction.userId),
+                        transaction.operationType,
+                        transaction.details.transactionAmount.toFixed(2),
+                        transaction.details.balanceBefore.toFixed(2),
+                        transaction.details.balanceAfter.toFixed(2)
+                    ]
+                }
+                else{
+                    return null;
+                }
+            }
+            else{
+                if (username.includes(props.searchValue) ||
+                transaction.operationType.includes(props.searchValue)) {
+                    return [
+                        findUserName(transaction.userId),
+                        transaction.operationType,
+                        transaction.details.transactionAmount.toFixed(2),
+                        transaction.details.balanceBefore.toFixed(2),
+                        transaction.details.balanceAfter.toFixed(2)
+                    ]
+                }
+                else {
+                    return null
+                }   
+            }
         })
     )
 
@@ -68,7 +110,9 @@ export default function Transactions() {
                                 tableHead={[
                                     "User",
                                     "Type",
-                                    "Amount"
+                                    "Amount",
+                                    "Balance Before",
+                                    "Balance After"
                                 ]}
                                 tableData={render}
                             />

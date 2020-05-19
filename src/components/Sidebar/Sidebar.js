@@ -85,7 +85,14 @@ export default function Sidebar(props) {
                   disableTypography={true}
                 />
               </ListItem>
+
+              {prop.isDivided ? <Divider style={{
+                backgroundColor: 'grey',
+                width: '150px',
+                margin: '0 0 0 60px'
+              }} /> : null}
             </NavLink>
+
           );
         }
       })
@@ -97,7 +104,7 @@ export default function Sidebar(props) {
   var brand = (
     <div className={classes.logo}>
       <a
-        href="https://aykutyrdm.github.io/bikesharing-intro-web-site/"
+        href="http://senior.ceng.metu.edu.tr/2020/bikesharing/"
         className={classNames(classes.logoLink)}
         target="_blank"
       >

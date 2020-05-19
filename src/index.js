@@ -19,6 +19,7 @@ ReactDOM.render(
     <Switch>
       
       <PublicRoute restricted={true} path="/login" component={Login} exact/>
+      <PublicRoute restricted={true} path="/" component={Login} exact/>
       <PrivateRoute path="/admin" component={Admin} exact/>
       <PrivateRoute path="/admin/dashboard" component={Admin} exact/>
       <PrivateRoute path="/admin/users" component={Admin} exact/>
