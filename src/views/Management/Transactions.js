@@ -41,18 +41,51 @@ export default function Transactions(props) {
     const render = loading ? [["...Loading"]] : (
         transactions.map(transaction => {
             const username = findUserName(transaction.userId);
-            if (username.includes(props.searchValue) ||
-                transaction.operationType.includes(props.searchValue)) {
-                return [
-                    findUserName(transaction.userId),
-                    transaction.operationType,
-                    transaction.details.transactionAmount.toFixed(2),
-                    transaction.details.balanceBefore.toFixed(2),
-                    transaction.details.balanceAfter.toFixed(2)
-                ]
+            if(props.searchValue.includes("<")){
+                const value = parseFloat(props.searchValue.substr(1));
+                if(transaction.details.transactionAmount < value){
+                    return [
+                        findUserName(transaction.userId),
+                        transaction.operationType,
+                        transaction.details.transactionAmount.toFixed(2),
+                        transaction.details.balanceBefore.toFixed(2),
+                        transaction.details.balanceAfter.toFixed(2)
+                    ]
+                }
+                else{
+                    return null;
+                }
+
             }
-            else {
-                return null
+            else if(props.searchValue.includes(">")){
+                const value = parseFloat(props.searchValue.substr(1));
+                if(transaction.details.transactionAmount > value){
+                    return [
+                        findUserName(transaction.userId),
+                        transaction.operationType,
+                        transaction.details.transactionAmount.toFixed(2),
+                        transaction.details.balanceBefore.toFixed(2),
+                        transaction.details.balanceAfter.toFixed(2)
+                    ]
+                }
+                else{
+                    return null;
+                }
+            }
+            else{
+                if (username.includes(props.searchValue) ||
+                transaction.operationType.includes(props.searchValue)) {
+                    return [
+                        findUserName(transaction.userId),
+                        transaction.operationType,
+                        transaction.details.transactionAmount.toFixed(2),
+                        transaction.details.balanceBefore.toFixed(2),
+                        transaction.details.balanceAfter.toFixed(2)
+                    ]
+                }
+                else {
+                    return null
+                }   
             }
         })
     )

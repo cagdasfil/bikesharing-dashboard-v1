@@ -67,26 +67,70 @@ export default function Usages(props) {
             const bikeBarcode = findBikeBarcode(usage.bikeId);
             const startZoneName = findZoneName(usage.startZoneId);
             const endZoneName = findZoneName(usage.endZoneId);
-            if (username.includes(props.searchValue) ||
+            if(props.searchValue.includes("<")){
+                const value = parseFloat(props.searchValue.substr(1));
+                if(payment.totalFee < value){
+                    return [
+                        username,
+                        bikeBarcode,
+                        startZoneName,
+                        endZoneName,
+                        usage.createdAt,
+                        usage.updatedAt,
+                        payment.totalFee.toFixed(2),
+                        (payment.totalFee - payment.totalPaid).toFixed(2),
+                        <UsageButton
+                            transactions={usageTransactions}
+                        />
+                    ]
+                }
+                else{
+                    return null;
+                }
+            }
+            else if(props.searchValue.includes(">")){
+                const value = parseFloat(props.searchValue.substr(1));
+                if(payment.totalFee > value){
+                    return [
+                        username,
+                        bikeBarcode,
+                        startZoneName,
+                        endZoneName,
+                        usage.createdAt,
+                        usage.updatedAt,
+                        payment.totalFee.toFixed(2),
+                        (payment.totalFee - payment.totalPaid).toFixed(2),
+                        <UsageButton
+                            transactions={usageTransactions}
+                        />
+                    ]
+                }
+                else{
+                    return null;
+                }
+            }
+            else{
+                if (username.includes(props.searchValue) ||
                 bikeBarcode.includes(props.searchValue) ||
                 startZoneName.includes(props.searchValue) ||
                 endZoneName.includes(props.searchValue)) {
-                return [
-                    username,
-                    bikeBarcode,
-                    startZoneName,
-                    endZoneName,
-                    usage.createdAt,
-                    usage.updatedAt,
-                    payment.totalFee.toFixed(2),
-                    (payment.totalFee - payment.totalPaid).toFixed(2),
-                    <UsageButton
-                        transactions={usageTransactions}
-                    />
-                ]
-            }
-            else {
-                return null
+                    return [
+                        username,
+                        bikeBarcode,
+                        startZoneName,
+                        endZoneName,
+                        usage.createdAt,
+                        usage.updatedAt,
+                        payment.totalFee.toFixed(2),
+                        (payment.totalFee - payment.totalPaid).toFixed(2),
+                        <UsageButton
+                            transactions={usageTransactions}
+                        />
+                    ]
+                }
+                else {
+                    return null
+                }
             }
         })
     )
