@@ -107,6 +107,18 @@ export default function Dashboard() {
         setSun(sun);
         setHours(hours);
     }
+    const [usages, setUsages] = useState([]);
+    useEffect(() => {
+        fetch('http://35.189.94.121/usages', {
+            method: 'get'
+        }).then((response) => {
+            return response.json();
+        }).then(usagesData => {
+            setUsages(usagesData)
+            localStorage.setItem("usages",JSON.stringify(usagesData));
+        })
+    }, []);
+
 
     useEffect(() => {
         fetch('https://bikesharing-261122.appspot.com/auth/local/', {
