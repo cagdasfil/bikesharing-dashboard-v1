@@ -1,13 +1,10 @@
-import React, { useState } from "react";
-import { Icon, LatLng } from "leaflet";
-import { Button, Form } from "react-bootstrap";
-//import { Container, Row, Col } from 'reactstrap';
-import {Map, Marker, Popup, TileLayer, Polygon } from "react-leaflet";
+import React from "react";
+import { Form } from "react-bootstrap";
+import {Map, Popup, TileLayer, Polygon } from "react-leaflet";
 import Draw from 'leaflet-draw';
 import "./map.css"
 import L from 'leaflet';
-//import $ from 'jquery';
-//window.$ = $;
+
 
 import Zones from "./Zones_table";
 
@@ -160,17 +157,7 @@ export default class Mapping extends React.Component{
   componentDidMount() {
     this.getData();
     const map = this.leafletMap.leafletElement;
-    var drawnItems = new L.FeatureGroup();
-    var popup = L.popup();
-    function onMapClick(e) {
-        popup
-            .setLatLng(e.latlng)
-            .setContent("You clicked the map at " + e.latlng.toString())
-            .openOn(map);
-    }
-
-    //map.on('click', onMapClick);
-    
+    var drawnItems = new L.FeatureGroup();    
     
     map.addLayer(drawnItems);
 
@@ -219,7 +206,6 @@ export default class Mapping extends React.Component{
       drawnItems.addLayer(layer);
       
       var allLayer = drawnItems.toGeoJSON().features;
-      var LatLng = [];
       var zones = [];
       for (let i = this.state.dataBaseZones.length; i < allLayer.length; i++) {
         var LatLng = [];
@@ -239,11 +225,9 @@ export default class Mapping extends React.Component{
 
     map.on(L.Draw.Event.EDITED, (e) => {
       const layers = e.layers;
-      let countOfEditedLayers = 0;
+
       console.log('LAYER EDITED:', layers)
-      layers.eachLayer((layer) => {
-        countOfEditedLayers++;
-      });
+
 
       var index = [];
       for (let i = 0; i < this.state.dataBaseZones.length; i++) {
@@ -338,7 +322,6 @@ export default class Mapping extends React.Component{
     }
 
     this.setState({isUpdate:false});
-    
   }
 
   handleClick(e) {
@@ -368,7 +351,7 @@ export default class Mapping extends React.Component{
                     positions={this.ters(coordinates)}
 
 
-                    color='#3E2723'
+                    color="#9d1ca8"
                     onClick={this.handleClick}
                     >
                     {!this.state.isUpdate?
@@ -383,7 +366,7 @@ export default class Mapping extends React.Component{
                             <div className="Setting">
                                 <Form.Label className="FormLabels">{address}</Form.Label>
                             </div>
-                            <button className ="SetMargin" type="button" onClick={() => this.updateNameAndAddress(id, coordinates)}>Update Zone</button>
+                            <button className ="SetMargin" type="submit" onClick={() => this.updateNameAndAddress(id, coordinates)}>Update Zone</button>
                             <button className ="SetMargin" type="submit" onClick={() => this.deleteClick(id)}>Delete Zone</button>
                                             
                             </div>                   
