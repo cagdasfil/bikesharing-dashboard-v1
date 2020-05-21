@@ -96,7 +96,6 @@ class HeatMap extends PureComponent {
 
                 }
                 else {
-                    console.log(usage.coords)
                     usage.coords.map(point => {
 
                         let feature = {
@@ -196,8 +195,16 @@ class HeatMap extends PureComponent {
                     type: "heatmap",
                     source: "point",
                     paint: {
+                        'heatmap-weight': {
+                            property: 'dbh',
+                            type: 'exponential',
+                            stops: [
+                              [5, 1],
+                              [15, 3]
+                            ]
+                          },
                         "heatmap-intensity": {
-                            stops: [[5, 1], [7, 3]]
+                            stops: [[5, 1], [15, 5]]
                         },
                         "heatmap-color": [
                             "interpolate",
@@ -216,11 +223,11 @@ class HeatMap extends PureComponent {
                             1,
                             "rgb(178,24,43)"],
                         "heatmap-radius": {
-                            stops: [[5, 2], [7, 20]]
+                            stops: [[5, 5], [15, 20]]
                         },
                         "heatmap-opacity": {
                             default: 1,
-                            stops: [[5, 1], [10, 0.5]]
+                            stops: [[5, 0.5], [15, 1]]
                         }
                     }
                 });
