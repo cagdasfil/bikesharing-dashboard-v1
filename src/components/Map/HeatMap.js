@@ -85,6 +85,7 @@ class HeatMap extends PureComponent {
             }
             const currentDate = new Date();
             this.state.usages.map(usage => {
+                if(usage.coords){
                 var usageDate = new Date(usage.createdAt);
                 if (usageDate.getDate() != currentDate.getDate()) {
 
@@ -139,7 +140,7 @@ class HeatMap extends PureComponent {
                     })
                 }
 
-            })
+            }})
             this.setState({ dailyPoints: dailyPoints });
             this.setState({ weeklyPoints: weeklyPoints });
             this.setState({ monthlyPoints: monthlyPoints });
@@ -203,8 +204,9 @@ class HeatMap extends PureComponent {
                               [15, 3]
                             ]
                           },
+
                         "heatmap-intensity": {
-                            stops: [[5, 1], [15, 5]]
+                            stops: [[5, 1], [15, 3]]
                         },
                         "heatmap-color": [
                             "interpolate",
@@ -223,7 +225,7 @@ class HeatMap extends PureComponent {
                             1,
                             "rgb(178,24,43)"],
                         "heatmap-radius": {
-                            stops: [[5, 5], [15, 20]]
+                            stops: [[5, 2], [15, 20]]
                         },
                         "heatmap-opacity": {
                             default: 1,
@@ -258,7 +260,7 @@ class HeatMap extends PureComponent {
 
 
 
-            <div className='sidebarStyle'>
+            <div className = 'sidebarStyle'>
                 <TextField
                     id="standard-select-currency"
                     select
@@ -273,8 +275,7 @@ class HeatMap extends PureComponent {
                         </MenuItem>
                     ))}
                 </TextField>
-                <div ref={el => { this.mapContainer = el }} style={{ position: 'relative', width: "60vw",
-    height: "70vh"}} />
+                <div ref={el => { this.mapContainer = el }} style={{ position: 'relative', height: "70vh", width: "60vw" }} />
             </div>
         );
     }
